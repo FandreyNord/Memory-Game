@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>memory-game</title>
+</head>
+<style type="text/css">
+body{
+	width: 100%;
+	margin: 0 auto;
+}
+header {
+    background: black;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+h1.name {
+    margin: 0;
+    padding: 40px;
+}
+.cell {
+	min-width: 100px;
+	border: 6px outset #040404;
+	min-height: 100px;
+	text-align: center;
+	font-size: 70px;
+}
+.field {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 65px 0px;
+}
+.cell:hover {
+	background: #f9ead6;  
+} 
+.row {
+	display: flex;
+	flex-direction: row;
+}
+.inCell {
+    display: none;
+}
+.active{
+	pointer-events: none;
+}
+</style>
+<body>
+	<header>
+		<h1 class="name">Memory Game</h1>
+	</header>
+	<div class="field" id="field"></div>
+</body>
+<script type="text/javascript">
+	let row
+	let column
+	while (row*column%2!=0){
+	row = getRandomIntInclusive(2, 6)
+	column = getRandomIntInclusive (2, 6)
+	let count = 0
+	}
+	let iconAnimals = [
+    '🐵',
+    '🐶',
+    '🐺',
+    '🐱',
+    '🐯',
+    '🐴',
+    '🐮',
+    '🐷',
+    '🐗',
+    '🐭',
+    '🐹',
+    '🐰',
+    '🐻',
+    '🐨',
+    '🐼',
+    '🐔',
+    '🐤',
+    '🐦',
+    '🐧',
+    '🐸',
+    '🐢',
+    '🐍',
+    '🐳',
+    '🐬',
+    '🐠',
+    '🐙',
+    '🍇',
+    '🍈',
+    '🍉',
+    '🍊',
+    '🍋',
+    '🍌',
+    '🍍',
+    '🍎',
+    '🍏',
+    '🍑',
+    '🍒',
+    '🍓',
+  ];
+let mainArray = fieldCreation(row, column,iconAnimals)
+innerMainArray(mainArray)
+function getRandomIntInclusive(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+function creatingColumnsAndRows(row, column) {
+	const field = document.querySelector('.field')
+	let array = new Array(row)
+	
+	for (let i = 0; i<=row - 1; i++){
+		array[i] = new Array(column)
+	}
+
+	for (let i = 0; i<=row - 1; i++){
+		let row_div = document.createElement('div')
+		for (let j = 0; j<=column - 1; j++){
+		row_div.classList.add('row')
+		row_div.innerHTML+=`<div class="cell" id="${i}_${j}"></div>`
+		}
+		field.appendChild(row_div)
+	}
+}
+
+function fieldFilling(row, column, iconAnimals){
+	let mainArray = new Array(row)
+	let iconsArray = []
+	let number
+
+	for (let i=0;i<row;i++){
+		mainArray[i] = new Array(column)
+	}
+
+	for(let i=0;i<(row*column)/2;i++){
+		number = getRandomIntInclusive(0,iconAnimals.length-1)
+		iconsArray.push(iconAnimals[number])
+		iconsArray.push(iconAnimals[number])
+		iconAnimals.splice(number,1)
+	}
+
+	for(let i=0;i<row;i++){
+		for(let j=0;j<column;j++){
+			number = getRandomIntInclusive(0,iconsArray.length-1)
+			mainArray[i][j] = iconsArray[number]
+			iconsArray.splice(number,1)
+		}
+	}
+	console.log(mainArray)
+
+	return mainArray
+
+}
+
+function fieldCreation(row, column,iconAnimals){
+	creatingColumnsAndRows(row, column)
+	let mainArray = fieldFilling(row, column,iconAnimals)
+	return mainArray
+}
+
+function innerMainArray(mainArray){
+	for (let i=0;i<row;i++){
+		for(let j=0;j<column;j++){
+			let cell = document.getElementById(`${i}_${j}`)
+			cell.innerHTML+=`<div class="inCell" id="${i}_${j}_0">${mainArray[i][j]}</div>`
+		}
+	}	
+}
+
+ s('.cell').click(function(event) {
+ 	let elClass = event.target.className
+ 	if(elClass==='cell'){
+        let id = event.target.id;
+        let cell = document.getElementById(id)
+        cell.classList.add('active')
+
+    }
+    });
+	
+
+
+
+</script>
+</html>
